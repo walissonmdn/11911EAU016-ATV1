@@ -46,11 +46,13 @@
 #define GPIO_BSRR_SET(n) (1 << (n))
 #define GPIO_BSRR_RST(n) (1 << (n + 16))
 
+static const char fw_version[] = {'V', '1', '.', '0'};
 static uint32_t led_status;
 
 int main(int argc, char *argv[])
 {
     uint32_t reg;
+    uint32_t LED_DELAY;
 
     uint32_t *pRCC_AHB1ENR = (uint32_t *)STM32_RCC_AHB1ENR;
     uint32_t *pGPIOC_MODER = (uint32_t *)STM32_GPIOC_MODER;
@@ -79,10 +81,10 @@ int main(int argc, char *argv[])
 
     while(1)
         {
-            *pGPIOC_BSRR = GPIO_BSRR13_SET;
+            *pGPIOC_BSRR = GPIO_BSRR_SET(13);
             led_status = 0;
             for(uint32_t i = 0; i < LED_DELAY; i++);
-            *pGPIOC_BSRR = GPIO_BSRR13_RESET;
+            *pGPIOC_BSRR = GPIO_BSRR_RST(13);
             led_status = 1;
             for(uint32_t i = 0; i < LED_DELAY; i++);
         }
